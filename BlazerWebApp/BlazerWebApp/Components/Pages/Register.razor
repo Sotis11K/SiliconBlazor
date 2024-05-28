@@ -109,7 +109,6 @@
         if(await UserManager.Users.AnyAsync(x => x.Email == user.Email)){
             ErrorMessage = "Email already in use.";
         }
-
         
         var result = await UserManager.CreateAsync(user, Input.Password);
 
