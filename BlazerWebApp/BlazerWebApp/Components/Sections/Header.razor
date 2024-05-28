@@ -1,0 +1,50 @@
+﻿
+<header class="contact-background">
+    <div class="container">
+        <a id="logo" href="">
+            <img src="/images/logos/silicon_logo1_light.svg" />
+        </a>
+
+        <nav>
+            <NavLink href="" Match="NavLinkMatch.All">Overview</NavLink>
+            <NavLink href="/#features">Features</NavLink>
+
+            <AuthorizeView>
+                <Authorized>
+                    <a href="/courses">Courses</a>
+                </Authorized>
+            </AuthorizeView>
+
+            <NavLink href="/contact">Contact</NavLink>
+        </nav>
+
+
+        <div class="btn-switch">
+            <label class="light-switch-text">Light</label>
+            <label class="switch">
+                <input type="checkbox" id="switch-mode" >
+                <span class="slider round"></span>
+            </label>
+            <label class="light-switch-text">Dark</label>
+        </div>
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="profile">
+                    <div class="profile-image">
+                        <a href="/account/details">
+                            <img src="/images/uploads/profiles/avatar.png" />
+                        </a>
+                    </div>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="account-buttons">
+                    <a class="btn-gray account-btn" href="/signin"><i class="fa-regular fa-arrow-right-to-bracket"></i> Sign in</a>
+                    <a class="btn-theme account-btn"href="/signup"><i class="fa-regular fa-user"></i> Sign up</a>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+        
+    </div>
+</header>

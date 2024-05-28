@@ -1,0 +1,173 @@
+
+#signin {
+    padding-top: 2rem;
+    height: 100%;
+    display: flex;
+    background-color: var(--color-gray-000);
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100% !important;
+
+        .btn-theme-s {
+            border: none;
+        }
+
+        @include md {
+            width: 60% !important;
+        }
+
+        @include lg {
+            width: 60% !important;
+        }
+
+        @include xl {
+            width: 40% !important;
+        }
+
+        .form-input-container {
+            padding: 1rem;
+            width: 100%;
+
+            @include md {
+                display: flex;
+                flex-direction: column;
+                width: max-content;
+            }
+
+
+            h1 {
+                color: var(--color-gray-900);
+            }
+
+            p {
+                color: var(--color-gray-900);
+            }
+
+            p {
+                text-decoration: none;
+                color: var(--color-gray-900);
+            }
+
+            .content {
+                margin-top: 30px;
+                display: grid;
+                gap: 20px;
+                grid-template-columns: 1fr;
+                grid-template-areas: "email" "password" "remember" "button" "forgot" "hr" "external";
+
+                @include md {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .input-group {
+                    border-radius: 0.25rem !important;
+                    background-color: red;
+
+                    label {
+                        padding: 3px;
+                    }
+
+                    form-control {
+                        width: 200px;
+                    }
+                }
+
+                .checkbox-group {
+                    margin-top: 10px;
+                    margin-bottom: 30px;
+
+
+                    .input-group {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: flex-start;
+                        gap: 0.75rem;
+                    }
+                }
+
+
+                #form-email {
+                    grid-area: email;
+                    background-color: var(--color-gray-000);
+                    color: var(--color-gray-900);
+
+                    input {
+                        background-color: var(--color-gray-000);
+                        color: var(--color-gray-900);
+                        width: 400px;
+                        border: solid 1px var(--color-gray-100);
+                    }
+
+                    &::placeholder {
+                        color: var(--color-gray-900);
+                    }
+                }
+
+                #form-password {
+                    grid-area: password;
+                    background-color: var(--color-gray-000);
+                    color: var(--color-gray-900);
+
+                    input {
+                        background-color: var(--color-gray-000);
+                        color: var(--color-gray-900);
+                        border: solid 1px var(--color-gray-100);
+                        width: 400px;
+                    }
+
+                    &::placeholder {
+                        color: var(--color-gray-200);
+                    }
+                }
+
+                #form-remember {
+                    grid-area: remember;
+                    padding: 1rem 0;
+                    background-color: var(--color-gray-000);
+                    color: var(--color-gray-900);
+                }
+
+                #form-button {
+                    grid-area: button;
+                }
+
+                #forgot-password {
+                    grid-area: forgot;
+                    text-align: center;
+                    text-decoration: none;
+                    margin: 1rem 0 0 0;
+                    background-color: var(--color-gray-000)
+                }
+
+                hr {
+                    grid-area: hr;
+                }
+
+                #external-signin {
+                    grid-area: external;
+                    display: flex;
+                    justify-content: center;
+                    gap: 1rem;
+
+                    .btn-gray {
+                        background-color: var(--color-gray-100);
+                        color: var(--color-gray-900);
+                        flex: 1;
+                        text-decoration: none;
+
+                        &:hover {
+                            cursor: pointer;
+                            background-color: var(--color-gray-600);
+                            color: var(--color-gray-000);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,363 @@
+.courses {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+    background-color: var(--color-gray-000);
+
+    .container {
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+
+
+
+
+            @include lg {
+                flex-direction: column;
+                align-items: self-end;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            @include mdd {
+                align-items: center;
+            }
+
+            h1 {
+                color: var(--color-gray-900);
+
+                @include lg {
+                    margin-right: auto;
+                    margin-left: auto;
+                }
+            }
+
+            #form-filters {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 1.5rem;
+
+                @include lg {
+                    justify-content: flex-end;
+                    position: relative;
+                    margin-bottom: 2rem;
+                    margin-right: 5rem;
+                    gap: 0;
+                }
+
+                @include md {
+                    margin-right: 0rem;
+                }
+
+                @include mdd {
+                    margin-left: 30rem;
+                }
+
+
+                .select {
+                    position: relative;
+                    min-width: 300px;
+
+                    @include lg {
+                        min-width: 250px;
+                        width: 100px;
+                    }
+
+                    .selected {
+                        padding: 0.5rem 1rem;
+                        border-radius: 0.5rem;
+                        border: 1px solid var(--color-gray-400);
+                        cursor: pointer;
+                        background-color: var(--color-gray-000);
+                        color: var(--color-gray-900);
+
+                        @include lg {
+                            min-width: none;
+                            width: 200px;
+                        }
+                    }
+
+                    .select-options {
+                        display: none;
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        right: 0;
+                        border: solid 1px var(--color-gray-400);
+                        z-index: 9999;
+                        background-color: var(--color-gray-000);
+                        color: var(--color-gray-900);
+
+                        @include lg {
+                            width: 200px;
+                        }
+
+                        .option {
+                            padding: 10px;
+                            cursor: pointer;
+                            background-color: var(--color-gray-000);
+                            color: var(--color-gray-900);
+                        }
+
+                        .option:hover {
+                            background-color: var(--color-gray-400);
+                        }
+                    }
+                }
+
+                .input-search-group {
+                    input {
+                        background-color: var(--color-gray-000);
+                        color: var(--color-gray-900);
+
+
+                        &::placeholder {
+                            color: var(--color-gray-900);
+                        }
+
+                        &:selected {
+                            border: solid 1px var(--color-gray-000);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        .course-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+
+            @include lg {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .bookmark {
+                position: relative;
+                top: 3rem;
+                left: 85%;
+                z-index: 999;
+                border: none;
+                border-radius: 50%;
+                padding: 0.75rem 1rem;
+                display: flex;
+                justify-content: center;
+                background-color: var(--color-gray-000);
+                color: var(--color-gray-900);
+                align-items: center;
+
+                &:hover {
+                    background-color: var(--color-gray-900);
+                    transition: 0.3s ease-in-out;
+                    color: var(--color-gray-000);
+                }
+            }
+
+            .course {
+                position: relative;
+                display: block;
+                border-radius: 8px;
+                overflow: hidden;
+                text-decoration: none;
+                box-shadow: 0 0 14px -4px var(--color-gray-500);
+                color: var(--color-gray-700);
+
+
+                &:hover {
+                    box-shadow: 0 0 14px -4px var(--color-gray-600);
+                }
+
+                .bestseller {
+                    position: absolute;
+                    top: 1rem;
+                    left: 1rem;
+                    background-color: $success;
+                    color: $white;
+                    padding: 4px 12px;
+                    border-radius: 4px;
+                }
+
+
+
+                img {
+                    width: 100%;
+                }
+
+                .content {
+                    padding: 1rem 2rem;
+
+                    .title {
+                        font-size: 20px;
+                        margin: 0.5rem 0;
+                    }
+
+                    .pricing {
+                        display: flex;
+                        gap: 1rem;
+                        font-size: 18px;
+                        font-weight: 600;
+
+                        .discount {
+                            color: $danger;
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+
+                        .original {
+                            color: $theme;
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+
+                        .discount-enabled {
+                            color: var(--color-gray-600);
+                            text-decoration: line-through;
+                            font-size: 18px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+
+                .footer {
+                    color: var(--color-gray-600);
+                    border-top: 1px solid var(--color-gray-400);
+                    display: flex;
+                    margin-top: 1rem;
+                    padding-top: 1rem;
+                    gap: 2rem;
+
+
+                    .hours {
+
+                        i {
+                            margin-right: 5px;
+                        }
+                    }
+
+                    .likes {
+                        i {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+
+
+
+            .number {
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                color: var(--color-gray-900);
+            }
+
+            .active {
+                box-shadow: 0 0 10px -3px $theme;
+                background-color: $theme;
+                color: white;
+            }
+
+            a {
+                text-decoration: none;
+
+                &:hover {
+                    background-color: var(--color-gray-100);
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .work-with-us {
+            background-color: var(--color-gray-200);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 2rem 0;
+
+            @include lg {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .work-with-us-text {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+
+                span {
+                    font-size: 1.25rem;
+                    font-weight: 400;
+                    color: var(--color-gray-900);
+                }
+
+                #skills-text {
+                    width: 350px;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: var(--color-gray-900);
+
+
+
+
+                    span {
+                        font-size: 1.875rem;
+                        font-weight: bold;
+                        color: $theme;
+                    }
+                }
+
+                a {
+                    width: 162px;
+                    text-decoration: none;
+
+                    @include lg {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            img {
+                height: 100%;
+            }
+        }
+    }
+}

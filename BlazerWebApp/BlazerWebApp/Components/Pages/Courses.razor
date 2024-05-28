@@ -1,0 +1,167 @@
+﻿@page "/courses"
+@attribute [StreamRendering]
+@* @attribute [Authorize]   *@
+
+
+<PageTitle>Courses</PageTitle>
+
+<section class="courses">
+    <div class="container">
+        <div class="header">
+            <h1>Courses</h1>
+            <form id="form-filters">
+                <div class="select">
+                    <div class="selected">All categories</div>
+                    <div class="select-options">
+                        <div class="option" data-value="all">All categories</div>
+                        @if (courses?.Categories == null)
+                        {
+                            <div class="option" data-value="No categories found">No categories found</div>
+                        }
+                        else
+                        {
+                            foreach (var category in courses.Categories)
+                            {
+                                <div class="option" data-value="@category.CategoryName">@category.CategoryName</div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="input-search-group">
+                    <input id="searchQuery" name="searchQuery" placeholder="Search courses" />
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-regular fa-search"></i>
+                </div>
+            </form>
+        </div>
+
+        @if (courses != null && courses.Courses != null)
+        {
+            <div class="course-items">
+                @foreach (var course in courses.Courses)
+                {
+                    <div>
+                        <button class="btn-circle bookmark" onclick="saveCourse(@course.Id)"><i class="fa-regular fa-bookmark"></i></button>
+                        <div class="course">
+
+                            @if (course.IsBestSeller)
+                            {
+                                <div class="bestseller">Best Seller</div>
+                            }
+
+                            <img src="~/images/courses/@course.Image" alt="@course.Title" />
+                            <div class="content">
+                                <h5 class="title">@course.Title</h5>
+                                <p class="author">@course.Author</p>
+                                <div class="pricing">
+                                    @if (!string.IsNullOrEmpty(course.DiscountPrice))
+                                    {
+                                        <div class="discount">@course.DiscountPrice</div>
+                                    }
+                                    <div class="price @(!string.IsNullOrEmpty(course.DiscountPrice)? "discount-enabled" : "")">@course.Price</div>
+                                </div>
+                                <div class="footer">
+                                    <div class="hours">
+                                        <i class="fa-regular fa-clock"></i> @course.Hours hours
+                                    </div>
+                                    <div class="likes">
+                                        <i class="fa-regular fa-thumbs-up"></i> @course.LikesInProcent (@course.LikesInNumbers)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (courses.Pagination != null && courses.Pagination.TotalPages > 1)
+            {
+                <div class="pagination">
+                    @for (int i = 1; i <= courses.Pagination.TotalPages; i++)
+                    {
+                        if (i == courses.Pagination.CurrentPage)
+                        {
+                            <span class="number active">@i</span>
+                        }
+                        else
+                        {
+                            <a class="number">@i</a>
+                        }
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <p><em>No courses found yet. Please wait...</em></p>
+        }
+
+        <div class="work-with-us">
+            <div class="work-with-us-text">
+                <span>Ready to get started?</span>
+                <span id="skills-text">Take Your<span> Skills </span>to the Next Level</span>
+                <a class="btn-theme" asp-controller="Contact" asp-action="Contact">Work with us</a>
+            </div>
+            <img src="/images/other/woman-working-light.svg" />
+        </div>
+    </div>
+</section>
+
+@code {
+    private CourseModel? courses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            courses = await Http.GetFromJsonAsync<CourseModel>("courseprovider-win23jsbackend-hansml.azurewebsite.net/api/courses");
+        }
+        catch (Exception ex)
+        {
+            // Handle exception (e.g., log error)
+        }
+    }
+
+    private class CourseModel
+    {
+        public IEnumerable<Category>? Categories { get; set; }
+        public Pagination? Pagination { get; set; }
+        public IEnumerable<Course>? Courses { get; set; }
+    }
+
+    public class Course
+    {
+        public int Id { get; set; }
+        public bool IsBestSeller { get; set; }
+        public string Image { get; set; } = null!;
+        public string BigImage { get; set; } = null!;
+        public string Title { get; set; } = null!;
+        public string Author { get; set; } = null!;
+        public string Price { get; set; } = null!;
+        public string? DiscountPrice { get; set; }
+        public string Hours { get; set; } = null!;
+        public string LikesInProcent { get; set; } = null!;
+        public string LikesInNumbers { get; set; } = null!;
+        public string Category { get; set; } = null!;
+    }
+
+    public class Category
+    {
+        public int Id { get; set; }
+        public string CategoryName { get; set; } = null!;
+    }
+
+    public class Pagination
+    {
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+
+        public void UpdateTotalPages()
+        {
+            TotalPages = (int)Math.Ceiling((double)TotalItems / PageSize);
+        }
+    }
+}

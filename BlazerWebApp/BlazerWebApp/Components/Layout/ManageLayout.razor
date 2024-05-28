@@ -1,0 +1,21 @@
+﻿@inherits LayoutComponentBase
+@layout AccountLayout
+
+
+<div class="mega-div">
+    <div class="container">
+        <section id="account-details">
+
+            <aside>
+                <div class="profile-info">
+                    <BlazerWebApp.Components.Sections.ProfileAccount />
+                    <ManageNavMenu />
+                </div>
+            </aside>
+
+            <div class="details">
+                @Body
+            </div>
+        </section>
+    </div>
+</div>
