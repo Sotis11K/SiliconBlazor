@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="Components\Methods\Logout.razor" />
   </ItemGroup>
 
   <ItemGroup>
