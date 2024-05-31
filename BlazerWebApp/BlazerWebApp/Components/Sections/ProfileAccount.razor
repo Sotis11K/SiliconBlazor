@@ -1,4 +1,5 @@
-﻿@* 
+﻿@attribute [StreamRendering]
+
 
 
 @if(user == null)
@@ -10,18 +11,16 @@ else
     <AuthorizeView>
         <Authorized>
 
-            @context.User.Identity?.Name
 
             <img src="/images/uploads/profiles/@user.ProfileImage" alt="@user.FirstName @user.LastName" />
 
             
-                Kolla upp hur man gör så han slutar yappa
             
 
-             <EditForm id="change-img" enctype="multipart/form-data" method="post" Model="" FormName="ProfileUpload" OnValidSubmit="HandleProfileUpload">
+             @* <EditForm id="change-img" enctype="multipart/form-data" method="post" Model="" FormName="ProfileUpload" OnValidSubmit="HandleProfileUpload">
                 <input id="fileUploader" type="file" name="file" hidden />
                 <label for="fileUploader" class="btn btn-circle btn-circle-sm">Change Profile Picture</label>
-            </EditForm>
+            </EditForm> *@
 
 
             <h5>@($"{user.FirstName} {user.LastName}")</h5>
@@ -31,13 +30,15 @@ else
                 <a><i class="fa-regular fa-lock"></i>Account Security</a>
                 <a><i class="fa-regular fa-bookmark"></i>Saved Courses</a>
                 <a><i class="fa-solid fa-arrow-right-from-bracket"></i>Sign Out</a>
+                <a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
+
             </nav>
         </Authorized>
     </AuthorizeView>
 }
 
 
-@code {
+@* @code {
 
     private ApplicationUser user = default!;
 
@@ -52,12 +53,28 @@ else
     }
 
 
-    public async Task HandleProfileUpload()
-    {
-        var result = await Http.PostAsync("https://fileprovider-win23jsbackend-hansml.azurewebsites", new MultipartFormDataContent
-        {
-            {new StreamContent((await (await JSRuntime.InvokeAsync<IJSObjectReference("FileUpload", "fileUploader")).InvokeAsync<IJSObjectReference>("files"))[0].AsStream()), "file", "profile.jpg"}
-        });
-    }
+    // public async Task HandleProfileUpload()
+    // {
+    //     var result = await Http.PostAsync("https://fileprovider-win23jsbackend-hansml.azurewebsites", new MultipartFormDataContent
+    //     {
+    //         {new StreamContent((await (await JSRuntime.InvokeAsync<IJSObjectReference("FileUpload", "fileUploader")).InvokeAsync<IJSObjectReference>("files"))[0].AsStream()), "file", "profile.jpg"}
+    //     });
+    // }
 
-}  *@
+}   *@
+
+
+
+@code {
+    [Parameter]
+    public ApplicationUser user { get; set; } = default!;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+
+    private async Task LoadUserDataAsync()
+    {
+        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+    }
+}

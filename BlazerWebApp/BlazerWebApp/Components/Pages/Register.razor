@@ -37,6 +37,7 @@
             <p>Already have an account? <a href="/signun">Sign up here</a></p>
             <div class="content">
 
+
                 <div id="form-firstname" class="input-group">
                     <label>First name</label>
                     <InputText @bind-Value="Input.FirstName" class="form-control" autocomplete="givenname" aria-required="true" placeholder="Enter your first name" />
@@ -126,37 +127,6 @@
         NavigationManager.NavigateTo(ReturnUrl ?? "/");
 
     }
-
-    // private sealed class InputModel
-    // {
-    //     [Required]
-    //     [Display(Name = "First name")]
-    //     public string FirstName { get; set; } = null!;
-
-    //     [Required]
-    //     [Display(Name = "Last name")]
-    //     public string LastName { get; set; } = null!;
-
-    //     [Required]
-    //     [EmailAddress]
-    //     [Display(Name = "Email")]
-    //     public string Email { get; set; } = null!;
-
-    //     [Required]
-    //     [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-    //     [DataType(DataType.Password)]
-    //     [Display(Name = "Password")]
-    //     public string Password { get; set; } = null!;
-
-    //     [DataType(DataType.Password)]
-    //     [Display(Name = "Confirm password")]
-    //     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-    //     public string ConfirmPassword { get; set; } = null!;
-
-    //     [CheckboxRequired]
-    //     [Display(Name = "I agree to the Terms & Conditions.")]
-    //     public bool TermsAndConditions { get; set; }
-    // }
 
     public class InputModel
     {

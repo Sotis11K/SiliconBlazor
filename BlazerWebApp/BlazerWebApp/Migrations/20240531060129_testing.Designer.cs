@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazerWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240528111315_test4")]
-    partial class test4
+    [Migration("20240531060129_testing")]
+    partial class testing
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +72,6 @@ namespace BlazerWebApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

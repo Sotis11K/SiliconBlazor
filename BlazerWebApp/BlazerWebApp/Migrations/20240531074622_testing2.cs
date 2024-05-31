@@ -5,11 +5,15 @@
 namespace BlazerWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class testing2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "DisplayName",
+                table: "AspNetUsers");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Email",
                 table: "AspNetUsers",
@@ -21,44 +25,11 @@ namespace BlazerWebApp.Migrations
                 oldType: "nvarchar(256)",
                 oldMaxLength: 256,
                 oldNullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ConfirmPassword",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Password",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Terms",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ConfirmPassword",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Password",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Terms",
-                table: "AspNetUsers");
-
             migrationBuilder.AlterColumn<string>(
                 name: "Email",
                 table: "AspNetUsers",
@@ -68,6 +39,13 @@ namespace BlazerWebApp.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(256)",
                 oldMaxLength: 256);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DisplayName",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }
