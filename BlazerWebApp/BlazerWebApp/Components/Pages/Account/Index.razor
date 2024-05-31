@@ -1,4 +1,4 @@
-﻿@page "/account/details"
+﻿ @page "/account/details"
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
@@ -22,7 +22,7 @@
                 <section class="basic-info">
 
 
-                    <EditForm class="form-basic" method="post" OnValidSubmit="UpdateBasicInfo">
+                    <EditForm class="form-basic" method="post" @* OnValidSubmit="UpdateBasicInfo" *@>
                         <DataAnnotationsValidator />
                         <h2>Account Details</h2>
                         <h5>Basic Info</h5>
@@ -188,44 +188,6 @@
 
 
 
-    // private ApplicationUser User { get; set; }
-
-    // protected override void OnInitialized()
-    // {
-    //     // Fetch current user's details
-    //     var userId = UserManager.GetUserId(User);
-    //     User = UserManager.FindByIdAsync(userId).Result;
-    // }
-
-    // private async Task UpdateBasicInfo()
-    // {
-    //     // Update user's details
-    //     var result = await UserManager.UpdateAsync(User);
-    //     if (result.Succeeded)
-    //     {
-    //         // Optionally, show success message or navigate to another page
-    //         NavigationManager.NavigateTo("/profile");
-    //     }
-    //     else
-    //     {
-    //         // Handle errors if update fails
-    //         foreach (var error in result.Errors)
-    //         {
-    //             // Handle or display error messages
-    //         }
-    //     }
-    // }
-
-    // // private void Cancel()
-    // // {
-    // //     // Optionally implement cancel logic
-    // //     NavigationManager.NavigateTo("/profile");
-    // // }
-
-
-
-
-
 
 
 
@@ -306,3 +268,113 @@
 
 
 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* 
+
+@page "/account/details"
+@using BlazerWebApp.Data
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+
+<EditForm Model="@User" OnValidSubmit="UpdateBasicInfo">
+    <DataAnnotationsValidator />
+
+    <h2>Account Details</h2>
+    <h5>Basic Info</h5>
+
+    <div class="content">
+        <div class="input-group">
+            <label>First name</label>
+            <InputText @bind-Value="User.FirstName" />
+            <ValidationMessage For="@(() => User.FirstName)" />
+        </div>
+
+        <div class="input-group">
+            <label>Last name</label>
+            <InputText @bind-Value="User.LastName" />
+            <ValidationMessage For="@(() => User.LastName)" />
+        </div>
+
+        <div class="input-group">
+            <label>Email address</label>
+            <InputText type="email" @bind-Value="User.Email" />
+            <ValidationMessage For="@(() => User.Email)" />
+        </div>
+
+        <div class="input-group">
+            <label>Phone<span>(optional)</span></label>
+            <InputText type="tel" @bind-Value="User.PhoneNumber" />
+        </div>
+
+        <div class="input-group">
+            <label>Biography<span>(optional)</span></label>
+            <InputTextArea @bind-Value="User.Biography" />
+        </div>
+
+        <div class="form-buttons">
+            <button class="btn-theme" type="submit">Save changes</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private ApplicationUser User { get; set; } = new ApplicationUser();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await UserManager.GetUserAsync(User);
+        if (user != null)
+        {
+            User = user;
+        }
+    }
+
+    private async Task UpdateBasicInfo()
+    {
+        var result = await UserManager.UpdateAsync(User);
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("/account/details", true); // Navigate back to account details page after successful update
+        }
+        else
+        {
+            // Handle update failure
+            foreach (var error in result.Errors)
+            {
+                // Handle or display errors as needed
+            }
+        }
+    }
+}
+ *@
