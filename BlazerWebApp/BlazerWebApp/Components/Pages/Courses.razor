@@ -1,7 +1,8 @@
-﻿@page "/courses"
+﻿
+@page "/courses"
+@using WebApp.Buisness.Models
 @attribute [StreamRendering]
-@* @attribute [Authorize]   *@
-
+@attribute [Authorize]
 
 <PageTitle>Courses</PageTitle>
 
@@ -9,93 +10,55 @@
     <div class="container">
         <div class="header">
             <h1>Courses</h1>
-            <form id="form-filters">
-                <div class="select">
-                    <div class="selected">All categories</div>
-                    <div class="select-options">
-                        <div class="option" data-value="all">All categories</div>
-                        @if (courses?.Categories == null)
-                        {
-                            <div class="option" data-value="No categories found">No categories found</div>
-                        }
-                        else
-                        {
-                            foreach (var category in courses.Categories)
-                            {
-                                <div class="option" data-value="@category.CategoryName">@category.CategoryName</div>
-                            }
-                        }
-                    </div>
-                </div>
-
-                <div class="input-search-group">
-                    <input id="searchQuery" name="searchQuery" placeholder="Search courses" />
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <i class="fa-regular fa-search"></i>
-                </div>
-            </form>
         </div>
 
-        @if (courses != null && courses.Courses != null)
+        @if (courses != null)
         {
+
             <div class="course-items">
-                @foreach (var course in courses.Courses)
+                @foreach (var course in courses)
                 {
-                    <div>
-                        <button class="btn-circle bookmark" onclick="saveCourse(@course.Id)"><i class="fa-regular fa-bookmark"></i></button>
-                        <div class="course">
+                    var link = $"courses/details/{course.Id}";
+                    <a href="@link">
+                        <div>
+                            <button class="btn-circle bookmark"><i class="fa-regular fa-bookmark"></i></button>
+                            <div class="course">
 
-                            @if (course.IsBestSeller)
-                            {
-                                <div class="bestseller">Best Seller</div>
-                            }
+                                @if (course.isBestSeller)
+                                {
+                                    <div class="bestseller">Best Seller</div>
+                                }
 
-                            <img src="~/images/courses/@course.Image" alt="@course.Title" />
-                            <div class="content">
-                                <h5 class="title">@course.Title</h5>
-                                <p class="author">@course.Author</p>
-                                <div class="pricing">
-                                    @if (!string.IsNullOrEmpty(course.DiscountPrice))
-                                    {
-                                        <div class="discount">@course.DiscountPrice</div>
-                                    }
-                                    <div class="price @(!string.IsNullOrEmpty(course.DiscountPrice)? "discount-enabled" : "")">@course.Price</div>
-                                </div>
-                                <div class="footer">
-                                    <div class="hours">
-                                        <i class="fa-regular fa-clock"></i> @course.Hours hours
+                                <img src="@course.image" alt="@course.title" />
+
+                                <div class="content">
+                                    <h5 class="title">@course.title</h5>
+                                    <p class="author">@course.author</p>
+                                    <div class="pricing">
+                                        @if (!string.IsNullOrEmpty(course.discountPrice))
+                                        {
+                                            <div class="discount">@course.discountPrice $</div>
+                                        }
+                                        <div class="price @(!string.IsNullOrEmpty(course.discountPrice)? "discount-enabled" : "")">@course.price $</div>
                                     </div>
-                                    <div class="likes">
-                                        <i class="fa-regular fa-thumbs-up"></i> @course.LikesInProcent (@course.LikesInNumbers)
+                                    <div class="footer">
+                                        <div class="hours">
+                                            <i class="fa-regular fa-clock"></i> @course.hours hours
+                                        </div>
+                                        <div class="likes">
+                                            <i class="fa-regular fa-thumbs-up"></i> @course.likesInProcent (@course.likesInNumbers)
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 }
             </div>
+        }
 
-            @if (courses.Pagination != null && courses.Pagination.TotalPages > 1)
-            {
-                <div class="pagination">
-                    @for (int i = 1; i <= courses.Pagination.TotalPages; i++)
-                    {
-                        if (i == courses.Pagination.CurrentPage)
-                        {
-                            <span class="number active">@i</span>
-                        }
-                        else
-                        {
-                            <a class="number">@i</a>
-                        }
-                    }
-                </div>
-            }
-        }
-        else
-        {
-            <p><em>No courses found yet. Please wait...</em></p>
-        }
+
+
 
         <div class="work-with-us">
             <div class="work-with-us-text">
@@ -109,59 +72,39 @@
 </section>
 
 @code {
-    private CourseModel? courses;
+    private List<CourseCardModel>? courses;
 
     protected override async Task OnInitializedAsync()
     {
-        try
+        var query = new GraphQLQuery { Query = "{getCourses {id isBestSeller title authors {author} prices {currency price discountPrice} hours likesInProcent likesInNumbers}}" };
+        var response = await Http.PostAsJsonAsync("http://localhost:7131/api/graphql", query);
+
+        if (response.IsSuccessStatusCode)
         {
-            courses = await Http.GetFromJsonAsync<CourseModel>(Environment.GetEnvironmentVariable("COURSES_APIURI"));
-        }
-        catch (Exception ex)
-        {
-            // Handle exception (e.g., log error)
-        }
-    }
+            var result = await response.Content.ReadFromJsonAsync<DynamicGraphQLResponse>();
+            if (result?.Data.TryGetProperty("getCourses", out var coursesElement) == true)
+            {
+                courses = coursesElement.EnumerateArray()
+                    .Select(course => new CourseCardModel
+                        {
+                            Id = course.TryGetProperty("id", out var id) ? id.GetString() : null,
+                            isBestSeller = course.TryGetProperty("isBestSeller", out var isBestSeller) && isBestSeller.GetBoolean(),
+                            image = course.TryGetProperty("image", out var image) ? image.GetString() : null,
+                            title = course.TryGetProperty("title", out var title) ? title.GetString() : null,
+                            author = course.TryGetProperty("authors", out var authors) && authors.GetArrayLength() > 0
+                                        ? authors[0].TryGetProperty("author", out var author) ? author.GetString() : null
+                                        : null,
+                            price = course.TryGetProperty("prices", out var prices) ? $"{prices.GetProperty("currency").GetString()} {prices.GetProperty("price").GetDouble()}" : null,
+                            discountPrice = prices.GetProperty("discountPrice").GetDouble() > 0
+                                ? $"{prices.GetProperty("currency").GetString()} {prices.GetProperty("price").GetDouble() - prices.GetProperty("discountPrice").GetDouble()}"
+                                : null,
+                            hours = course.TryGetProperty("hours", out var hours) ? hours.GetString() : null,
+                            likesInProcent = course.TryGetProperty("likesInProcent", out var likesInProcent) ? likesInProcent.GetString() : null,
+                            likesInNumbers = course.TryGetProperty("likesInNumbers", out var likesInNumbers) ? likesInNumbers.GetString() : null
 
-    private class CourseModel
-    {
-        public IEnumerable<Category>? Categories { get; set; }
-        public Pagination? Pagination { get; set; }
-        public IEnumerable<Course>? Courses { get; set; }
-    }
-
-    public class Course
-    {
-        public int Id { get; set; }
-        public bool IsBestSeller { get; set; }
-        public string Image { get; set; } = null!;
-        public string BigImage { get; set; } = null!;
-        public string Title { get; set; } = null!;
-        public string Author { get; set; } = null!;
-        public string Price { get; set; } = null!;
-        public string? DiscountPrice { get; set; }
-        public string Hours { get; set; } = null!;
-        public string LikesInProcent { get; set; } = null!;
-        public string LikesInNumbers { get; set; } = null!;
-        public string Category { get; set; } = null!;
-    }
-
-    public class Category
-    {
-        public int Id { get; set; }
-        public string CategoryName { get; set; } = null!;
-    }
-
-    public class Pagination
-    {
-        public int CurrentPage { get; set; }
-        public int TotalPages { get; set; }
-        public int PageSize { get; set; }
-        public int TotalItems { get; set; }
-
-        public void UpdateTotalPages()
-        {
-            TotalPages = (int)Math.Ceiling((double)TotalItems / PageSize);
+                        })
+                    .ToList();
+            }
         }
     }
 }

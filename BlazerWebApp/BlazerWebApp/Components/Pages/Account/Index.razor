@@ -5,6 +5,8 @@
 @using BlazerWebApp.Data
 
 @attribute [StreamRendering]
+@attribute [Authorize]
+
 
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
@@ -22,7 +24,7 @@
                 <section class="basic-info">
 
 
-                    <EditForm class="form-basic" method="post" @* OnValidSubmit="UpdateBasicInfo" *@>
+                    <EditForm Model="@BasicInfo" class="form-basic" method="post" @* OnValidSubmit="UpdateBasicInfo" *@>
                         <DataAnnotationsValidator />
                         <h2>Account Details</h2>
                         <h5>Basic Info</h5>
@@ -134,80 +136,6 @@
     }
 
 
-
-
-
-    // public partial class UpdateBasicInfo
-    // {
-    //     private BasicInfo BasicInfo { get; set; } = new BasicInfo();
-
-    //     // Inject your DbContext here
-    //     // private readonly YourDbContext _context;
-
-    //     // Constructor to inject dependencies if needed
-    //     // public UpdateBasicInfo(YourDbContext context)
-    //     // {
-    //     //     _context = context;
-    //     // }
-
-    //     protected void UpdateBasicInfo()
-    //     {
-    //         // Perform database update here using Entity Framework or any ORM
-
-    //         // Example using Entity Framework Core
-    //         // Assuming _context is injected correctly
-
-    //         // Pseudo-code to update database
-    //         // var user = _context.Users.FirstOrDefault(u => u.Id == userId); // Retrieve user from database
-    //         // if (user != null)
-    //         // {
-    //         //     user.FirstName = BasicInfo.FirstName;
-    //         //     user.LastName = BasicInfo.LastName;
-    //         //     user.Email = BasicInfo.Email;
-    //         //     user.Phone = BasicInfo.Phone;
-    //         //     user.Bio = BasicInfo.Bio;
-    //         //
-    //         //     _context.SaveChanges(); // Save changes to database
-    //         // }
-
-    //         // Optionally, you can add logic for handling success or failure messages
-    //         // For example:
-    //         // ShowToast("Changes saved successfully!");
-
-    //         // Redirect or refresh page if necessary
-    //         // NavigationManager.NavigateTo("/profile");
-    //     }
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public class AccountBasicInfo
     {
         [DataType(DataType.ImageUrl)]
@@ -266,115 +194,4 @@
 
 }
 
-
-
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@* 
-
-@page "/account/details"
-@using BlazerWebApp.Data
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<ApplicationUser> UserManager
-@inject NavigationManager NavigationManager
-
-<EditForm Model="@User" OnValidSubmit="UpdateBasicInfo">
-    <DataAnnotationsValidator />
-
-    <h2>Account Details</h2>
-    <h5>Basic Info</h5>
-
-    <div class="content">
-        <div class="input-group">
-            <label>First name</label>
-            <InputText @bind-Value="User.FirstName" />
-            <ValidationMessage For="@(() => User.FirstName)" />
-        </div>
-
-        <div class="input-group">
-            <label>Last name</label>
-            <InputText @bind-Value="User.LastName" />
-            <ValidationMessage For="@(() => User.LastName)" />
-        </div>
-
-        <div class="input-group">
-            <label>Email address</label>
-            <InputText type="email" @bind-Value="User.Email" />
-            <ValidationMessage For="@(() => User.Email)" />
-        </div>
-
-        <div class="input-group">
-            <label>Phone<span>(optional)</span></label>
-            <InputText type="tel" @bind-Value="User.PhoneNumber" />
-        </div>
-
-        <div class="input-group">
-            <label>Biography<span>(optional)</span></label>
-            <InputTextArea @bind-Value="User.Biography" />
-        </div>
-
-        <div class="form-buttons">
-            <button class="btn-theme" type="submit">Save changes</button>
-        </div>
-    </div>
-</EditForm>
-
-@code {
-    private ApplicationUser User { get; set; } = new ApplicationUser();
-
-    protected override async Task OnInitializedAsync()
-    {
-        var user = await UserManager.GetUserAsync(User);
-        if (user != null)
-        {
-            User = user;
-        }
-    }
-
-    private async Task UpdateBasicInfo()
-    {
-        var result = await UserManager.UpdateAsync(User);
-        if (result.Succeeded)
-        {
-            NavigationManager.NavigateTo("/account/details", true); // Navigate back to account details page after successful update
-        }
-        else
-        {
-            // Handle update failure
-            foreach (var error in result.Errors)
-            {
-                // Handle or display errors as needed
-            }
-        }
-    }
-}
- *@

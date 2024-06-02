@@ -1,0 +1,62 @@
+﻿@page "/account/notifications"
+@using Microsoft.EntityFrameworkCore
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+
+
+<div class="mega-div">
+    <div class="container">
+        <section id="account-details">
+            <div class="notifications">
+                <div class="container">
+                    <EditForm Model="@NotificationSettings" OnValidSubmit="SubscribeUser" FormName="subscribe">
+                        <DataAnnotationsValidator />
+
+                        <h2>Notifications</h2>
+                        <span>Preferred email for notifications</span>
+                        <InputText @bind-Value="NotificationSettings.Email" placeholder="example@gmail.com" />
+                        <ValidationMessage For="@(() => NotificationSettings.Email)" />
+
+                        <InputCheckbox @bind-Value="NotificationSettings.Newsletter" />
+                        <ValidationMessage For="@(() => NotificationSettings.Newsletter)" />
+
+                        <InputCheckbox @bind-Value="NotificationSettings.Theme" />
+                        <ValidationMessage For="@(() => NotificationSettings.Theme)" />
+
+                        <button type="submit">Save</button>
+                    </EditForm>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private NotificationEntity NotificationSettings { get; set; } = new();
+
+    private string? ErrorMessage { get; set; }
+
+    [Inject]
+    private ApplicationDbContext _dbContext { get; set; }
+
+    private async Task SubscribeUser(EditContext editContext)
+    {
+       
+        if (await _dbContext.NotificationEntities.AnyAsync(n => n.Email == NotificationSettings.Email))
+        {
+            ErrorMessage = "Email already in use.";
+            return;
+        }
+        else
+        {
+            await _dbContext.NotificationEntities.AddAsync(NotificationSettings); 
+            await _dbContext.SaveChangesAsync(); 
+
+            NavigationManager.NavigateTo("/account/notifications"); 
+                
+        }
+    }
+
+}

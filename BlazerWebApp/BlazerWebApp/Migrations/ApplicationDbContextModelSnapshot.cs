@@ -47,7 +47,7 @@ namespace BlazerWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AddressesEntities", (string)null);
+                    b.ToTable("AddressesEntities");
                 });
 
             modelBuilder.Entity("BlazerWebApp.Data.ApplicationUser", b =>
@@ -132,6 +132,29 @@ namespace BlazerWebApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("BlazerWebApp.Data.NotificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Newsletter")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Theme")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationEntities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
